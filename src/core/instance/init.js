@@ -12,29 +12,29 @@ import { extend, mergeOptions, formatComponentName } from '../util/index'
 
 let uid = 0
 
-export function initMixin (Vue: Class<Component>) {
-  Vue.prototype._init = function (options?: Object) {
-    const vm: Component = this
+export function initMixin (Vue) {
+  Vue.prototype._init = function (options) {
+    // vm拷贝当前实例
+    const vm = this
+    console.log(vm)
+    debug
     // a uid
     vm._uid = uid++  // 用户身份证明
 
-    let startTag, endTag
-    /* istanbul ignore if */
-    if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
-      startTag = `vue-perf-start:${vm._uid}`
-      endTag = `vue-perf-end:${vm._uid}`
-      mark(startTag)
-    }
+    // 性能埋点不关注
+    // let startTag, endTag
+    // if (process.env.NODE_ENV !== 'production' && config.performance && mark) {
+    //   startTag = `vue-perf-start:${vm._uid}`
+    //   endTag = `vue-perf-end:${vm._uid}`
+    //   mark(startTag)
+    // }
 
-    // a flag to avoid this being observed
     vm._isVue = true
     // 合并配置参数
     if (options && options._isComponent) {
-      // optimize internal component instantiation
-      // since dynamic options merging is pretty slow, and none of the
-      // internal component options needs special treatment.
       initInternalComponent(vm, options)
     } else {
+      // this实例的$options等于传去options和默认options的和
       vm.$options = mergeOptions(
         resolveConstructorOptions(vm.constructor),
         options || {},
